@@ -12,8 +12,8 @@
                 <default-info-card
                   :classIcon="salary.classIcon"
                   :title="salary.title"
-                  :desc="salary.desc"
-                  :price="salary.price"
+                  :desc="user.role"
+                  :price="'R$ ' + user.income"
                 />
               </div>
               <div class="col-md-6">
@@ -43,6 +43,48 @@
         <transaction-card />
       </div>
     </div>
+    <v-fade-transition hide-on-leave>
+      <v-card
+        v-if="this.$store.state.addCardModal"
+        append-icon="$close"
+        class="mx-auto"
+        elevation="16"
+        max-width="500"
+        title="Send a receipt"
+      >
+        <template v-slot:append>
+          <v-btn icon="$close" variant="text" @click="dialog = false"></v-btn>
+        </template>
+
+        <v-divider></v-divider>
+
+        <div class="py-12 text-center">
+          <v-icon
+            class="mb-6"
+            color="success"
+            icon="mdi-check-circle-outline"
+            size="128"
+          ></v-icon>
+
+          <div class="text-h4 font-weight-bold">This receipt was sent</div>
+        </div>
+
+        <v-divider></v-divider>
+
+        <div class="pa-4 text-end">
+          <v-btn
+            class="text-none"
+            color="medium-emphasis"
+            min-width="92"
+            rounded
+            variant="outlined"
+            @click="dialog = false"
+          >
+            Close
+          </v-btn>
+        </div>
+      </v-card>
+    </v-fade-transition>
   </div>
 </template>
 
@@ -78,7 +120,25 @@ export default {
         desc: "Freelance Payment",
         price: "$455.00",
       },
+      user: {},
     };
+  },
+
+  methods: {
+    getUser() {
+      this.$http
+        .get("profile.php")
+        .then((response) => {
+          this.user = response.data;
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    },
+  },
+
+  beforeMount() {
+    this.getUser();
   },
 };
 </script>

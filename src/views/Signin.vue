@@ -91,7 +91,7 @@
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
-import axios from "axios";
+
 const body = document.getElementsByTagName("body")[0];
 
 export default {
@@ -125,20 +125,16 @@ export default {
   },
   methods: {
     sendForm() {
-      axios
-        .post(
-          "http://localhost/signin.php",
-          { data: this.user },
-          {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-          }
-        )
+      this.$http
+        .post("signin.php", { data: this.user })
         .then((response) => {
+          localStorage.setItem("token", response.data.token);
+          //this.$store.state.token = response.data.token;
+          this.$store.commit("setToken", response.data.token);
           this.$router.push("/profile");
-        }).catch((error) => {
-          console.log(error);
+        })
+        .catch((error) => {
+          alert(error.response.data.message);
         });
     },
   },

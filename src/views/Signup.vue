@@ -38,12 +38,6 @@
                   v-model="user.username"
                 />
                 <input
-                  type="email"
-                  class="form-control mb-3"
-                  placeholder="Email"
-                  v-model="user.email"
-                />
-                <input
                   type="password"
                   class="form-control mb-2"
                   placeholder="Senha"
@@ -82,9 +76,7 @@ import AppFooter from "@/examples/PageLayout/Footer.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonCheckbox from "@/components/ArgonCheckbox.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
-import axios from "axios";
-import { useRouter } from "vue-router";
-const router = useRouter();
+
 const body = document.getElementsByTagName("body")[0];
 
 export default {
@@ -113,23 +105,14 @@ export default {
     return {
       user: {
         username: "",
-        email: "",
         password: "",
       },
     };
   },
   methods: {
     sendForm() {
-      axios
-        .post(
-          "http://localhost/signup.php",
-          { data: this.user },
-          {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-          }
-        )
+      this.$http
+        .post("signup.php", { data: this.user })
         .then((response) => {
           this.$router.push("/signin");
         })

@@ -7,12 +7,13 @@ import RTL from "../views/Rtl.vue";
 import Profile from "../views/Profile.vue";
 import Signup from "../views/Signup.vue";
 import Signin from "../views/Signin.vue";
+import store from "../store";
 
 const routes = [
   {
     path: "/",
     name: "/",
-    redirect: "/dashboard-default",
+    redirect: "/signin",
   },
   {
     path: "/dashboard-default",
@@ -48,11 +49,17 @@ const routes = [
     path: "/signin",
     name: "Signin",
     component: Signin,
+    meta: {
+      public: true,
+    }
   },
   {
     path: "/signup",
     name: "Signup",
     component: Signup,
+    meta: {
+      public: true,
+    }
   },
   
 ];
@@ -61,6 +68,13 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
   linkActiveClass: "active",
+});
+
+router.beforeEach((to, from, next) => {
+  if (!to.meta.public && !store.state.token) {
+    return next({ path: "/signin" });
+  }
+  next();
 });
 
 export default router;

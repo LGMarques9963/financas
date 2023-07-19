@@ -30,6 +30,7 @@
     "vue-axios": "^3.5.2",
     "vue-flatpickr-component": "9.0.5",
     "vue-router": "4.0.14",
+    "vuetify": "^3.3.8",
     "vuex": "4.0.2"
   },
   "devDependencies": {

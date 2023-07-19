@@ -16,7 +16,9 @@ export default createStore({
     showNavbar: true,
     showFooter: true,
     showMain: true,
-    layout: "default"
+    layout: "default",
+    token: localStorage.getItem('token') || '',
+    showAddNewCard: false,
   },
   mutations: {
     toggleConfigurator(state) {
@@ -44,6 +46,12 @@ export default createStore({
       } else {
         state.isNavFixed = false;
       }
+    },
+    setToken(state, token) {
+      state.token = token;
+    },
+    setAddNewCard(state) {
+      state.showAddNewCard = !state.showAddNewCard;
     }
   },
   actions: {

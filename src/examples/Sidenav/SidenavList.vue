@@ -113,15 +113,17 @@
       </li>
       <li class="nav-item">
         <sidenav-item
-          url="/signup"
+          @click.prevent="logout"
+          url="/signin"
           :class="getRoute() === 'signup' ? 'active' : ''"
-          :navText="this.$store.state.isRTL ? 'اشتراك' : 'Sign Up'"
+          :navText="'Logout'"
         >
           <template v-slot:icon>
             <i class="ni ni-collection text-info text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
+    
     </ul>
   </div>
 </template>
@@ -149,6 +151,11 @@ export default {
     getRoute() {
       const routeArr = this.$route.path.split("/");
       return routeArr[1];
+    },
+    logout() {
+      localStorage.removeItem("token");
+      this.$store.commit("setToken", null);
+      this.$router.push("/signin");
     },
   },
 };

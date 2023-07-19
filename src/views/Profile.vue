@@ -25,8 +25,8 @@
             </div>
             <div class="col-auto my-auto">
               <div class="h-100">
-                <h5 class="mb-1">Sayo Kravits</h5>
-                <p class="mb-0 font-weight-bold text-sm">Public Relations</p>
+                <h5 class="mb-1">{{ user.firstName }} {{ user.lastName}} </h5>
+                <p class="mb-0 font-weight-bold text-sm">{{ user.role }}</p>
               </div>
             </div>
             <div
@@ -216,25 +216,25 @@
                   <label for="example-text-input" class="form-control-label"
                     >Username</label
                   >
-                  <argon-input type="text" value="lucky.jesse" />
+                  <argon-input type="text" :value="user.username" />
                 </div>
                 <div class="col-md-6">
                   <label for="example-text-input" class="form-control-label"
                     >Email address</label
                   >
-                  <argon-input type="email" value="jesse@example.com" />
+                  <argon-input type="email" :value="user.email" />
                 </div>
                 <div class="col-md-6">
                   <label for="example-text-input" class="form-control-label"
                     >First name</label
                   >
-                  <input class="form-control" type="text" value="Jesse" />
+                  <input class="form-control" type="text" :value="user.firstName" />
                 </div>
                 <div class="col-md-6">
                   <label for="example-text-input" class="form-control-label"
                     >Last name</label
                   >
-                  <argon-input type="text" value="Lucky" />
+                  <argon-input type="text" :value="user.lastName" />
                 </div>
               </div>
               <hr class="horizontal dark" />
@@ -253,13 +253,13 @@
                   <label for="example-text-input" class="form-control-label"
                     >City</label
                   >
-                  <argon-input type="text" value="New York" />
+                  <argon-input type="text" :value="user.city" />
                 </div>
                 <div class="col-md-4">
                   <label for="example-text-input" class="form-control-label"
                     >Country</label
                   >
-                  <argon-input type="text" value="United States" />
+                  <argon-input type="text" :value="user.country" />
                 </div>
                 <div class="col-md-4">
                   <label for="example-text-input" class="form-control-label"
@@ -284,9 +284,6 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <profile-card />
-        </div>
       </div>
     </div>
   </main>
@@ -305,7 +302,8 @@ export default {
   name: "profile",
   data() {
     return {
-      showMenu: false
+      showMenu: false,
+      user: {}
     };
   },
   components: { ProfileCard, ArgonInput, ArgonButton },
@@ -314,6 +312,7 @@ export default {
     this.$store.state.isAbsolute = true;
     setNavPills();
     setTooltip();
+    this.getUserData();
   },
   beforeMount() {
     this.$store.state.imageLayout = "profile-overview";
@@ -329,6 +328,18 @@ export default {
     this.$store.state.showFooter = true;
     this.$store.state.hideConfigButton = false;
     body.classList.remove("profile-overview");
+  },
+  methods: {
+    getUserData() {
+      this.$http
+        .get("profile.php")
+        .then(response => {
+          this.user = response.data;
+        })
+        .catch(error => {
+          alert(error.message);
+        });
+    }
   }
 };
 </script>
